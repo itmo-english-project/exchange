@@ -1,15 +1,16 @@
-TARGET = cmd/exchange/main.go
-OUT = bin/exchange
+TARGET = exchange
+export GOPRIVATE=github.com/itmo-english-project/*
+CONFIG_PATH ?= cmd/$(TARGET)/deploy/application.yaml
 
 all: build test
 
 .PHONY: build
 build:
-	go build -o $(OUT) $(TARGET)
+	go build $(GOTAGS) -o bin/$(TARGET) cmd/$(TARGET)/main.go
 
 .PHONY: run
 run:
-	go run $(TARGET)
+	CONFIG_PATH=$(CONFIG_PATH) go run cmd/$(TARGET)/main.go
 
 .PHONY: fmt
 fmt:
@@ -32,3 +33,11 @@ coverage-html: coverage
 clean:
 	-rm -rf bin/
 	-find -type d -name '.cache' -exec rm -r {} +
+
+.PHONY: tidy
+tidy:
+	go mod tidy
+
+.PHONY: lint
+lint:
+	golangci-lint run -v ./...
