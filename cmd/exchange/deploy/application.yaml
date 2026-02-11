@@ -1,0 +1,10 @@
+general:
+  development: true
+  port: 9090
+
+db:
+  exchanges:
+    url: localhost:5432
+    username: postgres
+    password: postgres
+    name: exchange
