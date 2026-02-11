@@ -1,0 +1,42 @@
+info:
+  contact: {}
+paths:
+  /test:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: from id
+        in: query
+        name: from_id
+        type: string
+      - description: to id
+        in: query
+        name: to_id
+        type: string
+      - description: status
+        enum:
+        - pending
+        - accepted
+        - rejected
+        - cancelled
+        in: query
+        name: exchange_status
+        type: string
+      - description: comment
+        in: query
+        name: comment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: failure
+          schema:
+            type: string
+      summary: Inserts exchange event
+swagger: "2.0"

@@ -41,3 +41,7 @@ tidy:
 .PHONY: lint
 lint:
 	golangci-lint run -v ./...
+
+.PHONY: generate
+generate:
+	go generate ./...

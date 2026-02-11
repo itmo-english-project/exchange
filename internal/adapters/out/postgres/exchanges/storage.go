@@ -17,8 +17,6 @@ type Storage struct {
 func NewStorage(db postgres.Validator) (*Storage, error) {
 	if err := db.ValidateQueries([]string{
 		createExchange,
-		testSelect,
-		testInsert,
 	}); err != nil {
 		return nil, fmt.Errorf("invalid queries: %w", err)
 	}
@@ -27,14 +25,23 @@ func NewStorage(db postgres.Validator) (*Storage, error) {
 	}, nil
 }
 
-var tests []string
+type ExchangeStatus string
 
-func (s *Storage) InsertTest(ctx context.Context, comment string) error {
-	_, err := s.p.Exec(ctx, testInsert, comment)
+const (
+	ExchangeStatusPending   ExchangeStatus = "pending"
+	ExchangeStatusAccepted  ExchangeStatus = "accepted"
+	ExchangeStatusRejected  ExchangeStatus = "rejected"
+	ExchangeStatusCancelled ExchangeStatus = "cancelled"
+)
+
+func (s *Storage) InsertExchange(ctx context.Context, fromID string, toID string, status ExchangeStatus, comment string) error {
+	_, err := s.p.Exec(ctx, createExchange, fromID, toID, status, comment)
 	return errors.Wrap(err, "test query")
 }
 
-func (s *Storage) SelectTest(ctx context.Context) ([]string, error) {
+func (s *Storage) GetExchanges(ctx context.Context) ([]string, error) {
+	var testSelect string
+	var tests []string
 	rows, err := s.p.Query(ctx, testSelect)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to select")
