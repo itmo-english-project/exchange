@@ -1,0 +1,65 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/test": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Inserts exchange event",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "from id",
+                        "name": "from_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "to id",
+                        "name": "to_id",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "pending",
+                            "accepted",
+                            "rejected",
+                            "cancelled"
+                        ],
+                        "type": "string",
+                        "description": "status",
+                        "name": "exchange_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "comment",
+                        "name": "comment",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failure",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

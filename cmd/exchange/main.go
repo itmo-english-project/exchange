@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/itmo-english-project/exchange/docs"
 	"os"
 	"os/signal"
 	"syscall"
@@ -52,7 +53,11 @@ func main() {
 
 	publicServer := httpserver.New(
 		httphandler.DefaultMiddleware(logger),
-		[]httpserver.Provider{publicHandler},
+		[]httpserver.Provider{
+			publicHandler,
+			httphandler.NewSwaggerProvider("../docs/exchange/public/swagger.yaml"),
+			httphandler.NewDocsProvider(docs.FS),
+		},
 		httphandler.ErrorHandler,
 	)
 	go func() {

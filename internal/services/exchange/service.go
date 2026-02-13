@@ -1,10 +1,14 @@
 package exchange
 
-import "context"
+import (
+	"context"
+
+	"github.com/itmo-english-project/exchange/internal/adapters/out/postgres/exchanges"
+)
 
 type storage interface {
-	InsertTest(ctx context.Context, comment string) error
-	SelectTest(ctx context.Context) ([]string, error)
+	InsertExchange(ctx context.Context, fromID string, toID string, status exchanges.ExchangeStatus, comment string) error
+	GetExchanges(ctx context.Context) ([]string, error)
 }
 
 type Service struct {
@@ -17,12 +21,12 @@ func NewService(storage storage) *Service {
 	}
 }
 
-func (s *Service) Insert(ctx context.Context, comment string) error {
-	return s.storage.InsertTest(ctx, comment)
+func (s *Service) InsertExchange(ctx context.Context, fromID string, toID string, status exchanges.ExchangeStatus, comment string) error {
+	return s.storage.InsertExchange(ctx, fromID, toID, status, comment)
 }
 
-func (s *Service) Get(ctx context.Context) ([]string, error) {
-	tests, err := s.storage.SelectTest(ctx)
+func (s *Service) GetExchanges(ctx context.Context) ([]string, error) {
+	tests, err := s.storage.GetExchanges(ctx)
 	if err != nil {
 		return nil, err
 	}
